@@ -4,16 +4,41 @@ EJS assumes at default that there is a folder called 'views' that containes the 
 Goal is to pass logic from app.js into ejs file to dynamically update what client sees.
 -->
 
+<!-- Notes, must add scriptlet tags on line by line basis -->
 
 <!DOCTYPE HTML>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Todo List</title>
-  </head>
-  <body>
 
-    <h1>It's a <%= kindOfDay %>!</h1>
+<head>
+  <meta charset="utf-8">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
 
-  </body>
+<body>
+
+  <div class="box" id="heading">
+    <h1> <%= kindOfDay %> </h1>
+  </div>
+
+  <div class="box">
+    <!-- list through each item in array and add it to the list  from app.js-->
+    <% newListItems.forEach(function(item){ %>
+    <div class="item">
+      <input type="checkbox">
+      <p><%= item %></p>
+    </div>
+    <% }); %>
+
+    <form class="item" action="/" method="post">
+      <input type="text" name="newItem" placeholder="New Item">
+      <button type="submit" name="button">+</button>
+    </form>
+  </div>
+
+
+
+
+</body>
+
 </html>

@@ -1,52 +1,52 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const app = express();
+
+let items=[];
 
 // Use EJS as the view engine. Required to work.
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.static("public"));
 
-//Sends 'Hello' when user tries to access home route.
-// Will create a response based on date being weekday or weekend.
-// getDay() returns number 1-7 for the day of the week. Sunday = 0  monday = 1
 // res.render is an EJS functionallity
 // look for list.ejs within views folder. Pass in the variable kindOfDay, with the value of var day.
 // Some will use the same var name for app.js being passed to ejs. res.render('list', {day: day});
 app.get("/", function(req,res){
 
-    var today = new Date(); // Get date.
-    var currentDay = today.getDay(); // Get day returns 1-7 forday of week. Sunday = 0
-    var day = ""; // Set blank string that wil be updated based on day.
+    let today = new Date(); // Get date.
 
-    switch (currentDay){
-      case 0:
-        day = "Sunday";
-        break;
-      case 1:
-        day = "Monday";
-        break;
-      case 2:
-        day = "Tuesday";
-        break;
-      case 3:
-        day = "Humpday";
-        break;
-      case 4:
-        day = "Thursday";
-        break;
-      case 5:
-        day = "Friday";
-        break;
-      case 6:
-        day = "Saturday";
-        break;
-      default:
-        console.log("Error: Laws of time have been broken and no day was found.");
+    let options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
     };
 
-    res.render('list', {kindOfDay: day}); //kindOfDay var must match the var in list.ejs
+    let day = today.toLocaleDateString("en-US", options); //use built in function locale date string
+
+    //kindOfDay var must match the var in list.ejs
+    res.render('list', {kindOfDay: day, newListItems: items});
 
 });
+
+// Parse through the post req from list.EJS
+// Set server item to the newItem from the post input name
+// log it to hyper for fun.
+// Send out the newListItem with value of "item" AKA value ofreq.body.newItem
+// When a post is made, the var item is updated, and the page redirects back to the app.get("/") above.
+// This causes the page to update with the new values.
+app.post("/", function(req,res){
+  let item = req.body.newItem
+  console.log(req.body.newItem);
+
+  items.push(item);
+
+  res.redirect("/"); //
+
+});
+
+
+
 
 // Listen on port 3000
 app.listen(3000, function(){
