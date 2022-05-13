@@ -18,7 +18,8 @@ app.use(express.static("public")); //allow public folder
 
 // Mongoose, make connection, set schema, create model from schema
 mongoose.connect("mongodb+srv://mgrimsley:passwordOne@cluster0.l5lsg.mongodb.net/todolistDB")
-//mongoose.connect("mongodb://localhost:27017/todolistDB")
+// Local database listed command below
+// mongoose.connect("mongodb://localhost:27017/todolistDB")
 
 
 //create Scheme for initital db
@@ -196,7 +197,14 @@ app.get("/about", function(req,res){
     res.render("about");
 });
 
-// Listen on port 3000
-app.listen(3000, function(){
-  console.log("Server started at port 3000");
+
+
+//From Heroku port section
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+// Listen on port 3000.
+app.listen(port, function(){
+  console.log("Server has started.");
 });
